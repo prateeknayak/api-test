@@ -27,6 +27,7 @@ func main() {
 }
 
 func start(port string) {
+	log.Print("starting the api")
 	r := mux.NewRouter()
 	r.HandleFunc("/", root)
 	r.HandleFunc("/version", version)
