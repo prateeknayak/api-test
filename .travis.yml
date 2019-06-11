@@ -10,9 +10,11 @@ services:
 
 script:
   - docker build . -t pnyak/api-test:latest
-  - docker build . -t pnyak/api-test:${TRAVIS_BUILD_ID}.${TRAVIS_BUILD_NUMBER}
+  - docker tag pnyak/api-test:latest pnyak/api-test:${TRAVIS_BUILD_ID}.${TRAVIS_BUILD_NUMBER}
 
-after_success:
-  - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
-  - docker push pnyak/api-test:latest
-  - docker push pnyak/api-test:${TRAVIS_BUILD_ID}.${TRAVIS_BUILD_NUMBER}
+deploy:
+  provider: script
+  script: ./bin/docker_push.sh
+  on:
+    branch: master
+
