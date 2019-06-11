@@ -15,7 +15,7 @@ install:
   - go mod download
 
 script:
-  - golangci-lint run
+  - golangci-lint run -v
   - go test -v -race ./...
   - ./bin/docker_build.sh
 
