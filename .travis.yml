@@ -1,14 +1,22 @@
 language: go
-
 addons:
   apt:
     packages:
       - docker-ce
-
 services:
   - docker
+env:
+  - GO111MODULE=on
+  - GOFLAGS='-mod vendor'
+go:
+  - 1.12.x
+install:
+  - go install github.com/golangci/golangci-lint/cmd/golangci-lint
+  - go mod download
 
 script:
+  - golangci-lint run
+  - go test -v -race ./...
   - ./bin/docker_build.sh
 
 deploy:

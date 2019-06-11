@@ -12,50 +12,48 @@ import (
 )
 
 func TestRoot(t *testing.T) {
-	port := "12300"
-	go start(port)
+	go start()
 	client := &http.Client{
 		Timeout: 1 * time.Second,
 	}
 
-	r, _ := http.NewRequest("GET", "http://localhost:"+port+"/", nil)
+	r, _ := http.NewRequest("GET", "http://localhost:8080/", nil)
 
 	resp, err := client.Do(r)
 	if err != nil {
 		log.Print(err)
-		t.Fail()
+		t.FailNow()
 	}
 	assert.Equal(t, http.StatusOK, resp.StatusCode)
 
 	_, err = ioutil.ReadAll(resp.Body)
 	if err != nil {
 		log.Print(err)
-		t.Fail()
+		t.FailNow()
 	}
 	resp.Body.Close()
 
 }
 
 func TestVersion(t *testing.T) {
-	port := "12301"
-	go start(port)
+	go start()
 	client := &http.Client{
 		Timeout: 1 * time.Second,
 	}
 
-	r, _ := http.NewRequest("GET", "http://localhost:"+port+"/version", nil)
+	r, _ := http.NewRequest("GET", "http://localhost:8080/version", nil)
 
 	resp, err := client.Do(r)
 	if err != nil {
 		log.Print(err)
-		t.Fail()
+		t.FailNow()
 	}
 	assert.Equal(t, http.StatusOK, resp.StatusCode)
 
 	body, err := ioutil.ReadAll(resp.Body)
 	if err != nil {
 		log.Print(err)
-		t.Fail()
+		t.FailNow()
 	}
 	resp.Body.Close()
 
@@ -63,7 +61,7 @@ func TestVersion(t *testing.T) {
 	err = json.Unmarshal(body, info)
 	if err != nil {
 		log.Print(err)
-		t.Fail()
+		t.FailNow()
 	}
 
 	assert.Equal(t, "1.0.0", info.Version)
