@@ -23,13 +23,17 @@ type helloWorld struct {
 }
 
 func main() {
+	start("8080")
+}
+
+func start(port string) {
 	r := mux.NewRouter()
 	r.HandleFunc("/", root)
 	r.HandleFunc("/version", version)
 
 	s := &http.Server{
 		Handler:      r,
-		Addr:         ":8080",
+		Addr:         ":" + port,
 		WriteTimeout: 10 * time.Second,
 		ReadTimeout:  10 * time.Second,
 	}
