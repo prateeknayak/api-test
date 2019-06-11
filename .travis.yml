@@ -17,8 +17,11 @@ script:
   - ./bin/docker_build.sh
 
 deploy:
-  provider: script
-  script: ./bin/docker_push.sh
-  on:
-    branch: master
-
+  - provider: script
+    script: ./bin/docker_push.sh
+    on:
+      branch: master
+  - provider: script
+    script: ./bin/docker_push.sh
+    on:
+      branch: tags
