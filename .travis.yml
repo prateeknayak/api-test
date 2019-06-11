@@ -9,8 +9,7 @@ services:
   - docker
 
 script:
-  - docker build . -t pnyak/api-test:latest
-  - docker tag pnyak/api-test:latest pnyak/api-test:${TRAVIS_BUILD_ID}.${TRAVIS_BUILD_NUMBER}
+  - ./bin/docker_build.sh
 
 deploy:
   provider: script
