@@ -8,11 +8,11 @@ services:
 env:
   - GO111MODULE=on
 install:
-  - go install github.com/golangci/golangci-lint/cmd/golangci-lint
+#  - go install github.com/golangci/golangci-lint/cmd/golangci-lint
   - go mod download
 
 script:
-  - golangci-lint run -v
+#  - golangci-lint run -v
   - go test -v -race ./...
   - ./bin/docker_build.sh
 
@@ -24,4 +24,4 @@ deploy:
   - provider: script
     script: ./bin/docker_push.sh
     on:
-      branch: tags
+      tags: true
