@@ -44,7 +44,7 @@ func TestVersionHandler(t *testing.T) {
 			status, http.StatusOK)
 	}
 
-	expected := `{"version":"1.0.0","lastcommitsha":"a1b2c3def","description":"pre-interview technical test"}`
+	expected := `{"myapplication":[{"version":"1.0.0","lastcommitsha":"a1b2c3def","description":"pre-interview technical test"}]}`
 	if rr.Body.String() != expected {
 		t.Errorf("handler returned unexpected body: got %v want %v",
 			rr.Body.String(), expected)
