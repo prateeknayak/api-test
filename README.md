@@ -52,7 +52,7 @@ this means the API has started successfully and now you can access it on `http:/
 
 Execute the following command to run the v1.0.3 version of this app
 ```
-docker run -it -p 8080:8080 pnyak/api-test:latest:v1.0.3
+docker run -it -p 8080:8080 pnyak/api-test:v1.0.3
 ```
 
 The above command should result in a log line like
