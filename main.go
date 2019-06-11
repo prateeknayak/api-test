@@ -9,8 +9,8 @@ import (
 	"github.com/gorilla/mux"
 )
 
-var ver = "1.0.0"
-var sha = "a1b2c3def"
+var Ver = "1.0.0"
+var SHA = "a1b2c3def"
 
 type appInfo struct {
 	Version       string `json:"version"`
@@ -23,7 +23,6 @@ type helloWorld struct {
 }
 
 func main() {
-
 	r := mux.NewRouter()
 	r.HandleFunc("/", root)
 	r.HandleFunc("/version", version)
@@ -40,8 +39,8 @@ func main() {
 
 func version(w http.ResponseWriter, r *http.Request) {
 	info := appInfo{
-		Version:       ver,
-		LastCommitSHA: sha,
+		Version:       Ver,
+		LastCommitSHA: SHA,
 		Description:   "pre-interview technical test",
 	}
 
