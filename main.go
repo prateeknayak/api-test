@@ -12,6 +12,9 @@ import (
 var Ver = "1.0.0"
 var SHA = "a1b2c3def"
 
+type app struct {
+	AppName []appInfo `json:"myapplication"`
+}
 type appInfo struct {
 	Version       string `json:"version"`
 	LastCommitSHA string `json:"lastcommitsha"`
@@ -45,7 +48,13 @@ func version(w http.ResponseWriter, r *http.Request) {
 		Description:   "pre-interview technical test",
 	}
 
-	infoJSON, err := json.Marshal(info)
+	myApp := app{
+		AppName: []appInfo{
+			info,
+		},
+	}
+
+	infoJSON, err := json.Marshal(myApp)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 	}
