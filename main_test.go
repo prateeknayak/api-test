@@ -1,69 +1,52 @@
 package main
 
 import (
-	"encoding/json"
-	"io/ioutil"
-	"log"
 	"net/http"
+	"net/http/httptest"
 	"testing"
-	"time"
-
-	"github.com/stretchr/testify/assert"
 )
 
-func TestRoot(t *testing.T) {
-	go start()
-	client := &http.Client{
-		Timeout: 1 * time.Second,
-	}
+func TestRooHandler(t *testing.T) {
 
-	r, _ := http.NewRequest("GET", "http://localhost:8080/", nil)
-
-	resp, err := client.Do(r)
+	req, err := http.NewRequest("GET", "/", nil)
 	if err != nil {
-		log.Print(err)
-		t.FailNow()
+		t.Fatal(err)
 	}
-	assert.Equal(t, http.StatusOK, resp.StatusCode)
 
-	_, err = ioutil.ReadAll(resp.Body)
-	if err != nil {
-		log.Print(err)
-		t.FailNow()
+	rr := httptest.NewRecorder()
+	handler := http.HandlerFunc(root)
+	handler.ServeHTTP(rr, req)
+
+	if status := rr.Code; status != http.StatusOK {
+		t.Errorf("handler returned wrong status code: got %v want %v",
+			status, http.StatusOK)
 	}
-	resp.Body.Close()
 
+	expected := `{"message":"Hello World!"}`
+	if rr.Body.String() != expected {
+		t.Errorf("handler returned unexpected body: got %v want %v",
+			rr.Body.String(), expected)
+	}
 }
 
-func TestVersion(t *testing.T) {
-	go start()
-	client := &http.Client{
-		Timeout: 1 * time.Second,
-	}
-
-	r, _ := http.NewRequest("GET", "http://localhost:8080/version", nil)
-
-	resp, err := client.Do(r)
+func TestVersionHandler(t *testing.T) {
+	req, err := http.NewRequest("GET", "/version", nil)
 	if err != nil {
-		log.Print(err)
-		t.FailNow()
-	}
-	assert.Equal(t, http.StatusOK, resp.StatusCode)
-
-	body, err := ioutil.ReadAll(resp.Body)
-	if err != nil {
-		log.Print(err)
-		t.FailNow()
-	}
-	resp.Body.Close()
-
-	info := &appInfo{}
-	err = json.Unmarshal(body, info)
-	if err != nil {
-		log.Print(err)
-		t.FailNow()
+		t.Fatal(err)
 	}
 
-	assert.Equal(t, "1.0.0", info.Version)
-	assert.Equal(t, "a1b2c3def", info.LastCommitSHA)
+	rr := httptest.NewRecorder()
+	handler := http.HandlerFunc(version)
+	handler.ServeHTTP(rr, req)
+
+	if status := rr.Code; status != http.StatusOK {
+		t.Errorf("handler returned wrong status code: got %v want %v",
+			status, http.StatusOK)
+	}
+
+	expected := `{"version":"1.0.0","lastcommitsha":"a1b2c3def","description":"pre-interview technical test"}`
+	if rr.Body.String() != expected {
+		t.Errorf("handler returned unexpected body: got %v want %v",
+			rr.Body.String(), expected)
+	}
 }
