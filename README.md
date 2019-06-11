@@ -1,4 +1,4 @@
-# Test 2 API 
+# Test 2 API
 
 [![Build Status](https://travis-ci.org/prateeknayak/api-test.svg?branch=master)](https://travis-ci.org/prateeknayak/api-test)
 
@@ -13,7 +13,7 @@ Summary:
 - Pre-requisites
 - How to run the app?
 - How to build the app?
-- CI pipeline
+- CI pipeline and Versioning
 - Risks and Limitations
 - Future Improvements
 
@@ -21,7 +21,7 @@ Summary:
 ### 1 Pre-requisites
 
 - Docker engine
-- git 
+- git
 - golang 1.12
 - Set GO11MODULE=on in your bashrc
 
@@ -31,17 +31,39 @@ Summary:
 
 #### 2.1 Docker
 
-The travis pipeline in this project publishes a docker image to docker hub. Execute the following command to run the latest version of this app (not recommended for production, use a specific version)
+The travis pipeline in this project publishes a docker image to docker hub.
 
-`docker run -it -p 8080:8080 pnyak/api-test:latest`
+##### 2.1.1 Latest
 
-The above command should result in a log line like 
+Execute the following command to run the latest version of this app (not recommended for production, use a specific version)
+
+```
+docker run -it -p 8080:8080 pnyak/api-test:latest
+```
+
+The above command should result in a log line like
+
 ```
 2019/06/11 17:20:57 starting the api
 ```
 this means the API has started successfully and now you can access it on `http://localhost:8080/`
 
+##### 2.1.2 v1.0.3
+
+Execute the following command to run the v1.0.3 version of this app
+```
+docker run -it -p 8080:8080 pnyak/api-test:latest:v1.0.3
+```
+
+The above command should result in a log line like
+```
+2019/06/11 22:54:06 starting the api
+```
+this means the API has started successfully and now you can access it on `http://localhost:8080/`
+
+
 #### 2.2 Golang
+
 
 *NOTE:* For this you will need to have `git` and `golang` installed and configured on your machine.
 
@@ -56,7 +78,7 @@ From the root of the project
 go run main.go
 ```
 
-The above command should result in log line like 
+The above command should result in log line like
 ```
 2019/06/12 07:27:56 starting the api
 ```
@@ -93,9 +115,14 @@ Run the app from artefact
 ./api-test
 ```
 
-### 4 CI Pipeline
+### 4 CI Pipeline and Versioning
 
-This project has a travis CI pipeline enabled to build the application and publish the docker image to dockerhub. The pipeline. 
+This project has a travis CI pipeline enabled to build the application and publish the docker image to dockerhub. The API follows a loose versioning scheme which would need to be evolved per the use case of the team that works on this. the current versioning scheme and ci strategy is
+
+- Push docker image when merged / pused to master branch. Use `latest` as version for both app and docker image.
+- Push docker image when a tag is pushed. Use the tag as version for both app and docker image.
+- CI builds on push on every single branch and pull request but will not push any image.
+- CI is leveraging travis's `deploy` to target branches rather then logic in shell script.
 
 ### 5 Risks and Limitations
 
@@ -112,8 +139,9 @@ This project has a travis CI pipeline enabled to build the application and publi
 - Add observability support to the application by configuring logging, monitoring, tracing.
 - Enable ssl to serve traffic over https
 - Design OIDC or JWT flow for authentication and authorisation support
-- Secure way of providing docker credential. i.e use `travis encrypt` functionality. 
+- Secure way of providing docker credential. i.e use `travis encrypt` functionality.
 - Make this application deployable to a container orchestration engine like kubernetes.
 - Design a app / image versioning strategy based on the teams requirements.
+
 
 

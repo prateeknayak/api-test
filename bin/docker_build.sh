@@ -1,5 +1,6 @@
 #!/bin/bash
 
+echo "travis tag ${TRAVIS_TAG}:"
 if [ -z ${TRAVIS_TAG+x} ]; then
     docker build . -t pnyak/api-test:latest --build-arg app_version=latest
 else
