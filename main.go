@@ -23,6 +23,7 @@ type helloWorld struct {
 }
 
 func main() {
+	log.Print("starting the api")
 	r := mux.NewRouter()
 	r.HandleFunc("/", root)
 	r.HandleFunc("/version", version)
